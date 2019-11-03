@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+    server:
+        restart: always
+        build: ./backend
+        container_name: quajoo_api
+        depends_on:
+            - db
+        ports:
+            - "5000:5000"
+        networks:
+            - proxynet
+    
+    db:
+        container_name: quajoo_db
+        restart: always
+        image: postgres:latest
+        volumes:
+            - ./postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+        environment:
+            - POSTGRES_USER=admin
+            - POSTGRES_PASSWORD=quajoo
+            - POSTGRES_DB=quajoo
+        networks:
+            - proxynet
+    web:
+        restart: always
+        build: ./frontend/WeatherQuajoo
+        ports:
+            - "4200:4200"
+        command: > 
+            bash -c "npm install && ng serve --host 0.0.0.0 --port 4200"
+        container_name: quajoo_interface
+        depends_on:
+            - server
+        networks:
+            - proxynet
+        
+networks: 
+    proxynet: 
+        driver: bridge

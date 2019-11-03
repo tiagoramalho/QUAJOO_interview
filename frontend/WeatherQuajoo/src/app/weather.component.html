@@ -1,0 +1,34 @@
+<div ng-app="WeatherQuajoo" ng-controller="weather"> 
+
+    <div class="firstDiv">
+        <h1>Cities</h1>
+    </div>
+    <div class="table_div">
+        <table>
+            <thead>
+                <tr class="rowhead">
+                    <th class="column">City</th>
+                    <th class="column">temp Fahrenheit</th>
+                    <th class="column">temp Celsius</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="row body" *ngFor="let city of cityList">
+                    <td class="column2">{{ city.name }}</td>
+                    <td class="column2">{{ city.temp * 9/5 - 459.67 | number:'1.2-3'}} °F</td>
+                    <td class="column2">{{ city.temp  - 273.15 | number:'1.2-3'}} °C</td>
+                </tr>
+            </tbody>
+        </table>
+        <select [(ngModel)]="c"> 
+            <option *ngFor='let city of citiesJson' [ngValue]="city.id">
+            {{city.name}}
+            </option>
+        </select>
+        <button (click)="onSave(c)">Add City</button>
+
+
+    </div>
+
+
+</div>

@@ -1,0 +1,20 @@
+.firstDiv{
+    text-align: center;
+}
+.table_div{
+    width: 50%; 
+    margin: auto
+}
+.rowhead{
+    background: cadetblue;
+    color: black;
+}
+.column{
+    width:20pc;
+}
+.column2{
+    width:20pc;
+    text-align:center;
+    padding-top: 10px; 
+    padding-bottom:10px
+}
