@@ -1,10 +1,12 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {WeatherApiService} from './weather-api.service';
 import {City} from './city.model';
 import { Location } from '@angular/common';
 import citiesData from '../assets/formated_city_list.json';
 import {HttpHeaders, HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { take } from 'rxjs/operators';
+
 
 
 @Component({
@@ -12,7 +14,7 @@ import {HttpHeaders, HttpClient, HttpErrorResponse} from '@angular/common/http';
     templateUrl: './weather.component.html',
     styleUrls: ['./weather.component.css'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
     title = 'app';
     cityListSubs: Subscription;
     cityList: City[];
@@ -26,6 +28,7 @@ export class AppComponent implements OnInit {
     ngOnInit() {
         this.cityApi
             .getCities()
+            .pipe(take(1))
             .subscribe(cities => {
                 this.cityList = cities;
                 console.log(this.cityList);
@@ -41,7 +44,8 @@ export class AppComponent implements OnInit {
             .subscribe(
                 data  => {
                     console.log('POST Request is successful ', data);
-                    this.pageRefresh();
+                    this.cityList = [...this.cityList, data as City];
+                   // this.pageRefresh();
                     return true;
                 },
                 error  => {
@@ -56,6 +60,12 @@ export class AppComponent implements OnInit {
 
     pageRefresh() {
         location.reload();
+    }
+
+    ngOnDestroy() {
+        //this.cityListSubs.unsubscribe();
+
+
     }
 
 }

@@ -40,6 +40,7 @@ class City(Resource):
         data = parser.parse_args()
 
         if CityModel.find_by_open_id(data['open_id']):
+            print("ERROR")
             return {'message': 'City {} already exists'. format(data['open_id'])}
 
         resp = req.post("http://api.openweathermap.org/data/2.5/weather?id="+data["open_id"] +"&APPID="+OpenWeather)
@@ -54,4 +55,4 @@ class City(Resource):
         except Exception as e:
             print(e)
             return {"error" : "Internal Error"}
-        return {data["open_id"]:json_data["main"]["temp"]}
+        return {'id' : data["open_id"], 'temp':json_data["main"]["temp"], 'name':json_data['name']}
